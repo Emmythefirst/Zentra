@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    /* Light Mode - Clean, Professional */
+    --background: 0 0% 100%;           /* #FFFFFF */
+    --foreground: 0 0% 10%;            /* #1A1A1A */
+    --card: 0 0% 100%;                 /* #FFFFFF */
+    --card-foreground: 0 0% 10%;       /* #1A1A1A */
+    --popover: 0 0% 100%;
+    --popover-foreground: 0 0% 10%;
+    --primary: 217 91% 60%;            /* #3B82F6 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 97%;             /* #F8F9FA */
+    --secondary-foreground: 0 0% 10%;
+    --muted: 0 0% 97%;
+    --muted-foreground: 0 0% 42%;      /* #6B7280 */
+    --accent: 217 91% 60%;             /* #3B82F6 */
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 90%;                /* #E5E7EB */
+    --input: 0 0% 90%;
+    --ring: 217 91% 60%;
+    --radius: 0.75rem;                 /* 12px */
+  }
+
+  .dark {
+    /* Dark Mode - Sleek, Modern */
+    --background: 0 0% 6%;             /* #0F0F0F */
+    --foreground: 0 0% 100%;           /* #FFFFFF */
+    --card: 0 0% 12%;                  /* #1F1F1F */
+    --card-foreground: 0 0% 100%;
+    --popover: 0 0% 12%;
+    --popover-foreground: 0 0% 100%;
+    --primary: 217 91% 60%;            /* #3B82F6 */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 0 0% 10%;             /* #1A1A1A */
+    --secondary-foreground: 0 0% 100%;
+    --muted: 0 0% 10%;
+    --muted-foreground: 0 0% 63%;      /* #A1A1AA */
+    --accent: 217 91% 60%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 84% 60%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 0 0% 15%;                /* #27272A */
+    --input: 0 0% 15%;
+    --ring: 217 91% 60%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    font-feature-settings: "cv11", "ss01";
+    font-variation-settings: "opsz" auto;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold;
+  }
+
+  code, pre {
+    font-family: 'JetBrains Mono', monospace;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}
