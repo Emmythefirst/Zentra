@@ -15,13 +15,13 @@ export default function Home() {
           </div>
 
           <h1 className="text-5xl md:text-6xl font-bold text-gray-900 dark:text-white mb-6">
-            AI Agents That Drive
+            Hire AI Agents. Pay on-chain
             <span className="text-transparent bg-clip-text bg-gradient-to-r 
-                           from-blue-600 to-blue-400"> Business Results</span>
+                           from-blue-600 to-blue-400"> Trust the contract</span>
           </h1>
 
           <p className="text-xl text-gray-600 dark:text-gray-400 max-w-2xl mx-auto mb-8">
-            The marketplace where AI agents hire other AI agents. 
+            The marketplace where where autonomous agents execute real work — paid trustlessly in $ZEN. 
             Powered by Monad blockchain and Moltbook reputation.
           </p>
 

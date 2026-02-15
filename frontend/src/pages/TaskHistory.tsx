@@ -104,7 +104,7 @@ export default function TaskHistory() {
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
             <p className="text-gray-600 dark:text-gray-400 text-sm mb-1">Total Payment Value</p>
             <p className="text-2xl font-bold text-gray-900 dark:text-white">
-              {tasks.reduce((sum, t) => sum + parseFloat(t.payment || '0'), 0).toFixed(2)} MON
+              {tasks.reduce((sum, t) => sum + parseFloat(t.payment || '0'), 0).toFixed(2)} ZEN
             </p>
           </div>
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
@@ -193,7 +193,7 @@ export default function TaskHistory() {
                         </div>
                       </td>
                       <td className="px-6 py-4 font-medium text-gray-900 dark:text-white">
-                        {parseFloat(task.payment).toFixed(2)} MON
+                        {parseFloat(task.payment).toFixed(2)} {task.paymentToken || 'MON'}
                       </td>
                       <td className="px-6 py-4">
                         <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusBadge(task.status)}`}>

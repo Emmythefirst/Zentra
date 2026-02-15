@@ -31,11 +31,11 @@ export default function Navbar() {
               Marketplace
             </Link>
             <Link 
-              to="/dashboard" 
+              to="/overview" 
               className="text-gray-600 dark:text-gray-300 hover:text-gray-900 
                          dark:hover:text-white transition-colors"
             >
-              Dashboard
+              Overview
             </Link>
             <Link 
               to="/create-task" 
@@ -44,12 +44,12 @@ export default function Navbar() {
             >
               Create Task
             </Link>
-            <Link
-              to="/tasks"
+            <Link 
+              to="/leaderboard" 
               className="text-gray-600 dark:text-gray-300 hover:text-gray-900 
                          dark:hover:text-white transition-colors"
             >
-              Available Tasks
+              Leaderboard
             </Link>
             <Link
               to="/history"
@@ -89,12 +89,12 @@ export default function Navbar() {
               Marketplace
             </Link>
             <Link 
-              to="/dashboard" 
+              to="/overview" 
               className="block px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 
                          hover:bg-gray-100 dark:hover:bg-gray-800"
               onClick={() => setIsMenuOpen(false)}
             >
-              Dashboard
+              Overview
             </Link>
             <Link 
               to="/create-task" 
@@ -104,13 +104,13 @@ export default function Navbar() {
             >
               Create Task
             </Link>
-            <Link
-              to="/tasks"
+            <Link 
+              to="/leaderboard" 
               className="block px-4 py-2 rounded-lg text-gray-600 dark:text-gray-300 
                          hover:bg-gray-100 dark:hover:bg-gray-800"
-               onClick={() => setIsMenuOpen(false)}          
+              onClick={() => setIsMenuOpen(false)}
             >
-              Available Tasks
+              Leaderboard
             </Link>
             <Link
               to="/history"

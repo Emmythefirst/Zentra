@@ -16,8 +16,8 @@ const client = createPublicClient({
   transport: http('https://testnet-rpc.monad.xyz'),
 });
 
-const TASK_ESCROW_ADDRESS = '0x5906127D1A62eD149c30a426Abe72C6EDF5BAe7b' as `0x${string}`;
-
+const TASK_ESCROW_ADDRESS = import.meta.env.VITE_TASK_ESCROW_ADDRESS as `0x${string}`;
+export const ZEN_TOKEN_ADDRESS = import.meta.env.VITE_ZEN_TOKEN_ADDRESS as string;
 const TASK_ESCROW_ABI = [
   {
     inputs: [{ name: '_taskId', type: 'uint256' }],
@@ -30,6 +30,7 @@ const TASK_ESCROW_ABI = [
           { name: 'employer', type: 'address' },
           { name: 'worker', type: 'address' },
           { name: 'payment', type: 'uint256' },
+          { name: 'token', type: 'address' },     // ← new field, must match contract order
           { name: 'description', type: 'string' },
           { name: 'proofUrl', type: 'string' },
           { name: 'status', type: 'uint8' },
@@ -71,7 +72,6 @@ export function useUserTasks() {
     setLoading(true);
 
     try {
-      // Step 1: Get total task count from contract
       const total = await client.readContract({
         address: TASK_ESCROW_ADDRESS,
         abi: TASK_ESCROW_ABI,
@@ -81,7 +81,6 @@ export function useUserTasks() {
       const totalCount = Number(total);
       console.log(`📋 Total tasks on chain: ${totalCount}`);
 
-      // Step 2: Fetch all tasks and filter by this user's address
       const allTasks = [];
       for (let i = 1; i <= totalCount; i++) {
         try {
@@ -92,20 +91,22 @@ export function useUserTasks() {
             args: [BigInt(i)],
           });
 
-          // Show tasks where user is employer OR worker
           if (
             task.employer.toLowerCase() === address.toLowerCase() ||
             task.worker.toLowerCase() === address.toLowerCase()
           ) {
+            const isZen = task.token?.toLowerCase() === ZEN_TOKEN_ADDRESS.toLowerCase();
             allTasks.push({
               taskId: Number(task.taskId),
               employer: task.employer,
               worker: task.worker,
               description: task.description,
               payment: formatEther(task.payment),
+              paymentToken: isZen ? 'ZEN' : 'MON',   // human-readable token
+              tokenAddress: task.token,
               proofUrl: task.proofUrl,
               status: STATUS_MAP[task.status] || 'UNKNOWN',
-              createdAt: new Date().toISOString(), // contract doesn't store this
+              createdAt: new Date().toISOString(),
             });
           }
         } catch (err) {

@@ -2,15 +2,26 @@ import { useWriteContract, useReadContract } from 'wagmi';
 import { parseEther } from 'viem';
 import { useEffect, useState } from 'react';
 
-// TaskEscrow Contract ABI
+export const ZEN_TOKEN_ADDRESS = import.meta.env.VITE_ZEN_TOKEN_ADDRESS as `0x${string}`;
+const TASK_ESCROW_ADDRESS = import.meta.env.VITE_TASK_ESCROW_ADDRESS as `0x${string}`;
+
 const TASK_ESCROW_ABI = [
   {
-    inputs: [
-      { name: '_description', type: 'string' }
-    ],
+    inputs: [{ name: '_description', type: 'string' }],
     name: 'createTask',
-    outputs: [{ name: '', type: 'uint256' }],
+    outputs: [],
     stateMutability: 'payable',
+    type: 'function'
+  },
+  {
+    inputs: [
+      { name: '_description', type: 'string' },
+      { name: '_token', type: 'address' },
+      { name: '_amount', type: 'uint256' }
+    ],
+    name: 'createTaskWithToken',
+    outputs: [],
+    stateMutability: 'nonpayable',
     type: 'function'
   },
   {
@@ -39,6 +50,13 @@ const TASK_ESCROW_ABI = [
   },
   {
     inputs: [{ name: '_taskId', type: 'uint256' }],
+    name: 'cancelTask',
+    outputs: [],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [{ name: '_taskId', type: 'uint256' }],
     name: 'getTask',
     outputs: [
       {
@@ -48,6 +66,7 @@ const TASK_ESCROW_ABI = [
           { name: 'employer', type: 'address' },
           { name: 'worker', type: 'address' },
           { name: 'payment', type: 'uint256' },
+          { name: 'token', type: 'address' },
           { name: 'description', type: 'string' },
           { name: 'proofUrl', type: 'string' },
           { name: 'status', type: 'uint8' }
@@ -84,6 +103,7 @@ const TASK_ESCROW_ABI = [
       { indexed: true, name: 'taskId', type: 'uint256' },
       { indexed: true, name: 'employer', type: 'address' },
       { indexed: false, name: 'payment', type: 'uint256' },
+      { indexed: false, name: 'token', type: 'address' },
       { indexed: false, name: 'description', type: 'string' }
     ],
     name: 'TaskCreated',
@@ -100,15 +120,30 @@ const TASK_ESCROW_ABI = [
   }
 ] as const;
 
-// Your deployed TaskEscrow contract on Monad Testnet
-const TASK_ESCROW_ADDRESS = '0x5906127D1A62eD149c30a426Abe72C6EDF5BAe7b' as const;
+const ERC20_ABI = [
+  {
+    inputs: [
+      { name: 'spender', type: 'address' },
+      { name: 'amount', type: 'uint256' }
+    ],
+    name: 'approve',
+    outputs: [{ name: '', type: 'bool' }],
+    stateMutability: 'nonpayable',
+    type: 'function'
+  },
+  {
+    inputs: [{ name: 'account', type: 'address' }],
+    name: 'balanceOf',
+    outputs: [{ name: '', type: 'uint256' }],
+    stateMutability: 'view',
+    type: 'function'
+  }
+] as const;
 
-export function useTaskEscrow() {
-  const { writeContract, data: hash, isPending, error } = useWriteContract();
+function usePolling(hash: string | undefined) {
   const [isConfirming, setIsConfirming] = useState(false);
   const [isConfirmed, setIsConfirmed] = useState(false);
 
-  // Manual polling for Monad Testnet
   useEffect(() => {
     if (!hash) {
       setIsConfirming(false);
@@ -139,10 +174,8 @@ export function useTaskEscrow() {
         });
 
         const data = await response.json();
-        console.log('📦 Receipt data:', data);
-
         if (data.result && data.result.blockNumber) {
-          console.log('✅✅✅ TRANSACTION CONFIRMED!');
+          console.log('✅ TRANSACTION CONFIRMED!');
           setIsConfirmed(true);
           setIsConfirming(false);
         } else if (attempts < maxAttempts) {
@@ -153,11 +186,8 @@ export function useTaskEscrow() {
         }
       } catch (err) {
         console.error('❌ Error checking transaction:', err);
-        if (attempts < maxAttempts) {
-          setTimeout(checkTransaction, 1000);
-        } else {
-          setIsConfirming(false);
-        }
+        if (attempts < maxAttempts) setTimeout(checkTransaction, 1000);
+        else setIsConfirming(false);
       }
     };
 
@@ -165,7 +195,13 @@ export function useTaskEscrow() {
     return () => clearTimeout(timeout);
   }, [hash]);
 
-  // Log states
+  return { isConfirming, isConfirmed };
+}
+
+export function useTaskEscrow() {
+  const { writeContract, data: hash, isPending, error } = useWriteContract();
+  const { isConfirming, isConfirmed } = usePolling(hash);
+
   useEffect(() => {
     console.log('🔗 Contract Hook State:', { hash, isPending, error });
   }, [hash, isPending, error]);
@@ -174,19 +210,14 @@ export function useTaskEscrow() {
     console.log('⏳ Confirmation State:', { isConfirming, isConfirmed, hash });
   }, [isConfirming, isConfirmed, hash]);
 
-  // Create a new task - only description needed, payment sent as msg.value
+  // Create task with native MON
   const createTask = (
-    _worker: string,        // kept for API compatibility
+    _worker: string,
     description: string,
     paymentAmount: string,
-    _paymentToken: string   // kept for API compatibility
+    _paymentToken: string
   ) => {
-    console.log('🚀 Creating task with params:', {
-      description,
-      paymentAmount,
-      valueInWei: parseEther(paymentAmount).toString()
-    });
-
+    console.log('🚀 Creating task (MON):', { description, paymentAmount });
     writeContract({
       address: TASK_ESCROW_ADDRESS,
       abi: TASK_ESCROW_ABI,
@@ -194,11 +225,30 @@ export function useTaskEscrow() {
       args: [description],
       value: parseEther(paymentAmount),
     });
-
-    console.log('✅ writeContract called - MetaMask should popup');
   };
 
-  // Accept a task
+  // Step 1 of ZEN flow: approve escrow to spend ZEN
+  const approveZen = (amount: string) => {
+    console.log('🪙 Approving ZEN spend:', amount);
+    writeContract({
+      address: ZEN_TOKEN_ADDRESS,
+      abi: ERC20_ABI,
+      functionName: 'approve',
+      args: [TASK_ESCROW_ADDRESS, parseEther(amount)],
+    });
+  };
+
+  // Step 2 of ZEN flow: create task after approval confirmed
+  const createTaskWithZen = (description: string, amount: string) => {
+    console.log('🚀 Creating task (ZEN):', { description, amount });
+    writeContract({
+      address: TASK_ESCROW_ADDRESS,
+      abi: TASK_ESCROW_ABI,
+      functionName: 'createTaskWithToken',
+      args: [description, ZEN_TOKEN_ADDRESS, parseEther(amount)],
+    });
+  };
+
   const acceptTask = (taskId: bigint) => {
     writeContract({
       address: TASK_ESCROW_ADDRESS,
@@ -208,7 +258,6 @@ export function useTaskEscrow() {
     });
   };
 
-  // Submit work proof
   const submitWork = (taskId: bigint, proofUrl: string) => {
     writeContract({
       address: TASK_ESCROW_ADDRESS,
@@ -218,7 +267,6 @@ export function useTaskEscrow() {
     });
   };
 
-  // Verify and release payment
   const verifyAndRelease = (taskId: bigint) => {
     writeContract({
       address: TASK_ESCROW_ADDRESS,
@@ -230,6 +278,8 @@ export function useTaskEscrow() {
 
   return {
     createTask,
+    approveZen,
+    createTaskWithZen,
     acceptTask,
     submitWork,
     verifyAndRelease,
@@ -241,7 +291,6 @@ export function useTaskEscrow() {
   };
 }
 
-// Hook to read a single task
 export function useTask(taskId: bigint) {
   const { data, isLoading, error } = useReadContract({
     address: TASK_ESCROW_ADDRESS,
@@ -249,25 +298,25 @@ export function useTask(taskId: bigint) {
     functionName: 'getTask',
     args: [taskId],
   });
-
-  return {
-    task: data,
-    isLoading,
-    error,
-  };
+  return { task: data, isLoading, error };
 }
 
-// Hook to read total task count
 export function useTotalTasks() {
   const { data, isLoading, error } = useReadContract({
     address: TASK_ESCROW_ADDRESS,
     abi: TASK_ESCROW_ABI,
     functionName: 'getTotalTasks',
   });
+  return { totalTasks: data ? Number(data) : 0, isLoading, error };
+}
 
-  return {
-    totalTasks: data ? Number(data) : 0,
-    isLoading,
-    error,
-  };
+export function useZenBalance(address: string) {
+  const { data, isLoading } = useReadContract({
+    address: ZEN_TOKEN_ADDRESS,
+    abi: ERC20_ABI,
+    functionName: 'balanceOf',
+    args: [address as `0x${string}`],
+    query: { enabled: !!address },
+  });
+  return { balance: data ?? 0n, isLoading };
 }

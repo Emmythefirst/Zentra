@@ -39,9 +39,9 @@ const AGENT_SPECIALTIES: Record<string, string[]> = {
 };
 
 const AGENT_RATES: Record<string, number> = {
-  ZentraResearcher: 15,
-  ZentraScraper: 10,
-  ZentraAnalyst: 12,
+  ZentraResearcher: 500,
+  ZentraScraper: 300,
+  ZentraAnalyst: 200,
 };
 
 // ============================================

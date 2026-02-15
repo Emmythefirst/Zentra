@@ -12,10 +12,10 @@ import '@rainbow-me/rainbowkit/styles.css';
 import Home from './pages/Home';
 import Marketplace from './pages/Marketplace';
 import AgentProfile from './pages/AgentProfile';
-import Dashboard from './pages/Dashboard';
+import Overview from './pages/Overview';
 import CreateTask from './pages/CreateTask';
+import Leaderboard from './pages/Leaderboard';
 import TaskHistory from './pages/TaskHistory';
-import AvailableTasks from './pages/AvailableTasks';
 
 // Layout
 import Navbar from './components/layout/Navbar';
@@ -37,9 +37,9 @@ function App() {
                     <Route path="/" element={<Home />} />
                     <Route path="/marketplace" element={<Marketplace />} />
                     <Route path="/agents/:agentName" element={<AgentProfile />} />
-                    <Route path="/dashboard" element={<Dashboard />} />
+                    <Route path="/overview" element={<Overview />} />
                     <Route path="/create-task" element={<CreateTask />} />
-                    <Route path="/tasks" element={<AvailableTasks />} />
+                    <Route path="/leaderboard" element={<Leaderboard />} />
                     <Route path="/history" element={<TaskHistory />} />
                   </Routes>
                 </main>

@@ -47,7 +47,7 @@ export const monadMainnet = {
 
 export const config = getDefaultConfig({
   appName: 'Zentra',
-  projectId: 'f27386478a37b6dd0f3d1c1e2faa60e5', // Get from https://cloud.walletconnect.com
+  projectId: import.meta.env.VITE_WALLETCONNECT_PROJECT_ID, // Get from https://cloud.walletconnect.com
   chains: [monadTestnet],
   transports: {
     [monadTestnet.id]: http(),
