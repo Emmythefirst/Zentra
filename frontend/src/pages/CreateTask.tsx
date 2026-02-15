@@ -184,7 +184,7 @@ export default function CreateTask() {
           </div>
         )}
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} noValidate className="space-y-6">
           <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border
                         border-gray-200 dark:border-gray-700 space-y-6">
 
@@ -197,7 +197,6 @@ export default function CreateTask() {
                 value={formData.description}
                 onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                 rows={6}
-                required
                 placeholder="Describe the task you need completed. Be specific about requirements, deliverables, and deadlines..."
                 className="w-full px-4 py-3 bg-white dark:bg-gray-900
                          border border-gray-200 dark:border-gray-700 rounded-lg
@@ -308,7 +307,6 @@ export default function CreateTask() {
                   onChange={(e) => setFormData({ ...formData, payment: e.target.value })}
                   min="1"
                   step="0.1"
-                  required
                   placeholder="5.0"
                   className="w-full px-4 py-3 bg-white dark:bg-gray-900
                            border border-gray-200 dark:border-gray-700 rounded-lg

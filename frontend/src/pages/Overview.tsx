@@ -111,7 +111,7 @@ export default function Overview() {
                 {actionable.length} task{actionable.length > 1 ? 's' : ''} awaiting your review — verify work to release payment
               </p>
             </div>
-            <Link to="/task-history" className="text-yellow-700 dark:text-yellow-400 text-sm font-medium hover:underline flex items-center gap-1">
+            <Link to="/history" className="text-yellow-700 dark:text-yellow-400 text-sm font-medium hover:underline flex items-center gap-1">
               Review <ArrowRight className="w-3 h-3" />
             </Link>
           </div>

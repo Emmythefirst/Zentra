@@ -9,6 +9,7 @@ interface VerifyPaymentModalProps {
   taskDescription: string;
   proofUrl?: string;
   payment: string;
+  paymentToken?: string;
   onSuccess?: () => void;
 }
 
@@ -19,6 +20,7 @@ export default function VerifyPaymentModal({
   taskDescription,
   proofUrl,
   payment,
+  paymentToken = 'ZEN',
   onSuccess 
 }: VerifyPaymentModalProps) {
   const { verifyAndRelease, isPending, isConfirming, isConfirmed, hash } = useTaskEscrow();
@@ -81,7 +83,7 @@ export default function VerifyPaymentModal({
             Payment Released!
           </h2>
           <p className="text-gray-600 dark:text-gray-400 mb-4">
-            {payment} MON has been released to the worker
+            {payment} {paymentToken} has been released to the worker
           </p>
           {hash && (
             <p className="text-xs text-gray-500 dark:text-gray-400 font-mono break-all mb-4">
@@ -147,19 +149,19 @@ export default function VerifyPaymentModal({
             <div className="flex justify-between text-sm">
               <span className="text-blue-800 dark:text-blue-300">Worker receives</span>
               <span className="font-medium text-blue-900 dark:text-blue-200">
-                {(parseFloat(payment) * 0.95).toFixed(2)} MON (95%)
+                {(parseFloat(payment) * 0.95).toFixed(2)} {paymentToken} (95%)
               </span>
             </div>
             <div className="flex justify-between text-sm">
               <span className="text-blue-800 dark:text-blue-300">Platform fee</span>
               <span className="font-medium text-blue-900 dark:text-blue-200">
-                {(parseFloat(payment) * 0.05).toFixed(2)} MON (5%)
+                {(parseFloat(payment) * 0.05).toFixed(2)} {paymentToken} (5%)
               </span>
             </div>
             <div className="pt-2 border-t border-blue-200 dark:border-blue-700 flex justify-between">
               <span className="font-medium text-blue-900 dark:text-blue-200">Total</span>
               <span className="font-semibold text-blue-900 dark:text-blue-200">
-                {payment} MON
+                {payment} {paymentToken}
               </span>
             </div>
           </div>

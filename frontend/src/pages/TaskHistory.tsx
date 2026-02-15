@@ -5,12 +5,14 @@ import {
   XCircle, AlertTriangle, Clock, Loader2, RefreshCw, Wallet
 } from 'lucide-react';
 import { useAccount } from 'wagmi';
+import VerifyPaymentModal from '@/components/tasks/VerifyPaymentModal';
 
 export default function TaskHistory() {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const { tasks, loading, refresh } = useUserTasks();
   const [searchQuery, setSearchQuery] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [verifyTask, setVerifyTask] = useState<any>(null);
 
   const filteredTasks = tasks.filter(task => {
     const matchesSearch = task.description.toLowerCase().includes(searchQuery.toLowerCase());
@@ -165,6 +167,7 @@ export default function TaskHistory() {
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Status</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Worker</th>
                   <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Proof</th>
+                  <th className="px-6 py-4 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Action</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
@@ -221,6 +224,21 @@ export default function TaskHistory() {
                           <span className="text-gray-400 text-sm">—</span>
                         )}
                       </td>
+                      <td className="px-6 py-4">
+                        {task.status === 'SUBMITTED' &&
+                         task.employer?.toLowerCase() === address?.toLowerCase() ? (
+                          <button
+                            onClick={() => setVerifyTask(task)}
+                            className="px-3 py-1.5 bg-green-600 text-white rounded-lg
+                                     hover:bg-green-700 transition-colors text-sm font-medium
+                                     whitespace-nowrap"
+                          >
+                            Verify & Release
+                          </button>
+                        ) : (
+                          <span className="text-gray-400 text-sm">—</span>
+                        )}
+                      </td>
                     </tr>
                   ))
                 )}
@@ -229,6 +247,19 @@ export default function TaskHistory() {
           </div>
         </div>
       </div>
+
+      {verifyTask && (
+        <VerifyPaymentModal
+          isOpen={!!verifyTask}
+          onClose={() => setVerifyTask(null)}
+          taskId={verifyTask.taskId}
+          taskDescription={verifyTask.description}
+          proofUrl={verifyTask.proofUrl}
+          payment={verifyTask.payment}
+          paymentToken={verifyTask.paymentToken || 'ZEN'}
+          onSuccess={() => { setVerifyTask(null); refresh(); }}
+        />
+      )}
     </div>
   );
 }
