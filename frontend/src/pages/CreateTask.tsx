@@ -96,7 +96,7 @@ export default function CreateTask() {
   useEffect(() => {
     if (isConfirmed && (paymentToken === 'MON' || zenStep === 'creating')) {
       console.log('✅ Task confirmed on-chain! Redirecting...');
-      setTimeout(() => navigate('/overview'), 8000);
+      setTimeout(() => navigate('/history'), 8000);
     }
   }, [isConfirmed, navigate, paymentToken, zenStep]);
 
