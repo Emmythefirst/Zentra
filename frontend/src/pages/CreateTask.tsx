@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { useAccount } from 'wagmi';
 import { AlertCircle, Loader2, CheckCircle, ExternalLink, Coins } from 'lucide-react';
 import { useTaskEscrow } from '@/hooks/useContract';
-import { ZEN_TOKEN } from '@/utils/contracts';
 
 const CATEGORY_MAP: Record<string, string> = {
   scraping: 'web_scraping',
@@ -142,10 +141,10 @@ export default function CreateTask() {
               </a>
             )}
             <button
-              onClick={() => navigate('/overview')}
+              onClick={() => navigate('/history')}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
-              Go to Overview
+              Go to Task History
             </button>
           </div>
         </div>
@@ -282,14 +281,11 @@ export default function CreateTask() {
                     <p className="text-blue-700 dark:text-blue-300">
                       1. Approve ZEN spend &nbsp;→&nbsp; 2. Create task &amp; lock in escrow
                     </p>
-                    <a
-                      href={ZEN_TOKEN.NAD_FUN_URL}
-                      target="_blank"
-                      rel="noopener noreferrer"
+                      <Link to="/get-zen"
                       className="inline-flex items-center gap-1 text-blue-600 dark:text-blue-400 hover:underline mt-1"
                     >
                       Buy ZEN on nad.fun <ExternalLink className="w-3 h-3" />
-                    </a>
+                    </Link>
                   </div>
                 </div>
               )}

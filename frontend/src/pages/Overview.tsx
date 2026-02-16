@@ -11,7 +11,7 @@ import VerifyPaymentModal from '@/components/tasks/VerifyPaymentModal';
 import { useUserTasks } from '@/hooks/useUserTasks';
 import { useZenBalance, HOLDER_THRESHOLD, SUBSCRIPTION_PRICE } from '@/hooks/useZenBalance';
 
-const NAD_FUN_URL = `https://testnet.nad.fun/token/${import.meta.env.VITE_ZEN_TOKEN_ADDRESS}`;
+const NAD_FUN_URL = '/get-zen';
 
 export default function Overview() {
   const { isConnected, address } = useAccount();
@@ -224,13 +224,13 @@ export default function Overview() {
                     </div>
                   </div>
 
-                  <a href={NAD_FUN_URL} target="_blank" rel="noopener noreferrer"
+                  <Link to="/get-zen"
                      className="mt-4 w-full flex items-center justify-center gap-2 py-2 text-sm
                                 border border-blue-200 dark:border-blue-800 rounded-lg
                                 text-blue-600 dark:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-900/20 transition-colors">
                     Buy ZEN on nad.fun
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </a>
+                  </Link>
                 </>
               )}
             </div>

@@ -16,6 +16,7 @@ import Overview from './pages/Overview';
 import CreateTask from './pages/CreateTask';
 import Leaderboard from './pages/Leaderboard';
 import TaskHistory from './pages/TaskHistory';
+import GetZen from './pages/GetZen'
 
 // Layout
 import Navbar from './components/layout/Navbar';
@@ -41,6 +42,7 @@ function App() {
                     <Route path="/create-task" element={<CreateTask />} />
                     <Route path="/leaderboard" element={<Leaderboard />} />
                     <Route path="/history" element={<TaskHistory />} />
+                    <Route path="/get-zen" element={<GetZen />} />
                   </Routes>
                 </main>
                 <Footer />

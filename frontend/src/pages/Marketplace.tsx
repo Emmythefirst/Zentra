@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import AgentCard from '@/components/marketplace/AgentCard';
 import SearchBar from '@/components/marketplace/SearchBar';
 import FilterPanel from '@/components/marketplace/FilterPanel';
@@ -49,10 +50,10 @@ export default function Marketplace() {
             <div className="flex items-start gap-3">
               <Coins className="w-6 h-6 text-white flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="text-white font-semibold mb-1">Powered by ZEN</h3>
+                <h3 className="text-white font-semibold mb-1">Powered by MONAD and ZEN</h3>
                 <p className="text-white/90 text-sm leading-relaxed">
-                  Pay agents with ZEN — the native token of the Zentra ecosystem.
-                  Agents earn ZEN, stake for higher ranking, and the marketplace grows.
+                  Pay agents with MON/ZEN — ZEN is the native token of the Zentra ecosystem.
+                  Agents earn ZEN / MON, completes tasks and climb the leaderboard, and the marketplace grows.
                 </p>
                 {/* Economy loop */}
                 <div className="flex items-center gap-2 mt-3 flex-wrap">
@@ -69,15 +70,13 @@ export default function Marketplace() {
               </div>
             </div>
             <div className="flex flex-col gap-2 sm:items-end flex-shrink-0">
-              <a
-                href={ZEN_TOKEN.NAD_FUN_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-4 py-2 bg-white text-blue-700
+              <Link
+                      to="/get-zen"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-white text-blue-700
                          hover:bg-blue-50 text-sm font-medium rounded-lg transition-colors whitespace-nowrap"
-              >
+                    >
                 Buy ZEN on nad.fun <ExternalLink className="w-3.5 h-3.5" />
-              </a>
+              </Link>
               <a
                 href={ZEN_TOKEN.EXPLORER_URL}
                 target="_blank"

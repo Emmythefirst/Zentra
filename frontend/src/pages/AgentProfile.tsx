@@ -8,9 +8,9 @@ import {
   Lock, Crown, Zap, Coins, Clock, AlertCircle, Wallet
 } from 'lucide-react';
 import { useZenBalance, HOLDER_THRESHOLD, SUBSCRIPTION_PRICE } from '@/hooks/useZenBalance';
-import { useSubscription, SUBSCRIPTION_DURATION_DAYS, SUBSCRIPTION_CONTRACT } from '@/hooks/useSubscription';
+import { useSubscription, SUBSCRIPTION_DURATION_DAYS } from '@/hooks/useSubscription';
 
-const NAD_FUN_URL = `https://testnet.nad.fun/token/${import.meta.env.VITE_ZEN_TOKEN_ADDRESS}`;
+const NAD_FUN_URL = '/get-zen';
 
 export default function AgentProfile() {
   const { agentName } = useParams<{ agentName: string }>();
@@ -19,9 +19,9 @@ export default function AgentProfile() {
   const [agent, setAgent] = useState<Agent | null>(null);
   const [loading, setLoading] = useState(true);
   const [showSubModal, setShowSubModal] = useState(false);
-  const [subSuccess, setSubSuccess] = useState(false);
+  const [ subSuccess, setSubSuccess ] = useState(false);
 
-  const { isHolder, balanceDisplay, canSubscribe } = useZenBalance();
+  const { isHolder, balanceDisplay } = useZenBalance();
   const {
     isSubscribed, getDaysLeft, subscribe, pending, step, error,
     hasHolderAccessToday, getHolderCooldownHours, recordHolderAccess,
@@ -112,7 +112,7 @@ export default function AgentProfile() {
                           rounded-lg border border-amber-200 dark:border-amber-800">
             <Clock className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
             <p className="text-sm text-amber-700 dark:text-amber-300">
-              Daily limit reached — available again in {getHolderCooldownHours()}h
+              Daily limit reached (3/3 tasks used) — resets in {getHolderCooldownHours()}h
             </p>
           </div>
           <button
@@ -134,7 +134,7 @@ export default function AgentProfile() {
                         rounded-lg border border-amber-200 dark:border-amber-800">
           <Lock className="w-4 h-4 text-amber-600 dark:text-amber-400 flex-shrink-0" />
           <p className="text-sm text-amber-700 dark:text-amber-300">
-            Verified agent — ZEN access required
+            Verified agent — ZEN / MON access required
           </p>
         </div>
         <button
@@ -142,7 +142,7 @@ export default function AgentProfile() {
           className="w-full px-6 py-3 bg-blue-600 hover:bg-blue-700 text-white
                      rounded-lg transition-colors font-medium"
         >
-          Get Access with ZEN
+          Get Access with ZEN / MON
         </button>
       </div>
     );
@@ -159,13 +159,13 @@ export default function AgentProfile() {
     if (tier === 'holder' || tier === 'holder_cooldown') return (
       <span className="inline-flex items-center gap-1 px-2 py-1 bg-blue-100 dark:bg-blue-900/30
                        text-blue-700 dark:text-blue-300 rounded-full text-xs font-medium">
-        <Zap className="w-3 h-3" /> ZEN Holder Access
+        <Zap className="w-3 h-3" /> ZEN/MON Holder Access
       </span>
     );
     return (
       <span className="inline-flex items-center gap-1 px-2 py-1 bg-amber-100 dark:bg-amber-900/30
                        text-amber-700 dark:text-amber-400 rounded-full text-xs font-medium">
-        <Lock className="w-3 h-3" /> ZEN Required
+        <Lock className="w-3 h-3" /> ZEN / MON Required
       </span>
     );
   };
@@ -237,16 +237,7 @@ export default function AgentProfile() {
             {/* Description */}
             <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
               <h2 className="text-xl font-semibold text-gray-900 dark:text-white mb-4">About</h2>
-              {tier === 'locked' ? (
-                <div className="flex items-center gap-3 p-4 bg-gray-50 dark:bg-gray-900 rounded-lg">
-                  <Lock className="w-5 h-5 text-gray-400 flex-shrink-0" />
-                  <p className="text-gray-400 dark:text-gray-500 italic text-sm">
-                    Hold 10,000+ ZEN or subscribe to read this agent's full profile
-                  </p>
-                </div>
-              ) : (
-                <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{agent.description}</p>
-              )}
+              <p className="text-gray-600 dark:text-gray-400 leading-relaxed">{agent.description}</p>
             </div>
 
             {/* Skills */}
@@ -295,7 +286,7 @@ export default function AgentProfile() {
                 <div>
                   <p className="text-gray-900 dark:text-white">Earnings</p>
                   <p className="text-sm text-gray-500 dark:text-gray-400">
-                    {(agent.tasks_completed * agent.hourly_rate * 0.95).toLocaleString()} ZEN earned
+                    {(agent.tasks_completed * agent.hourly_rate * 0.95).toLocaleString()} MON earned
                   </p>
                  </div>
                 </div>
@@ -313,7 +304,7 @@ export default function AgentProfile() {
               <div className="space-y-3 mb-6">
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Rate</span>
-                  <span className="font-semibold text-gray-900 dark:text-white">{agent.hourly_rate} ZEN/task</span>
+                  <span className="font-semibold text-gray-900 dark:text-white">{agent.hourly_rate} MON/task</span>
                 </div>
                 <div className="flex justify-between">
                   <span className="text-gray-600 dark:text-gray-400">Success Rate</span>
@@ -346,7 +337,7 @@ export default function AgentProfile() {
               <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700">
                 <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                   <Coins className="w-4 h-4 text-blue-500" />
-                  ZEN Access Tiers
+                  ZEN / MON Access Tiers
                 </h3>
                 <div className="space-y-3 text-sm">
                   <div className={`flex items-start gap-2 p-2 rounded-lg ${isHolder ? 'bg-blue-50 dark:bg-blue-900/20' : ''}`}>
@@ -355,14 +346,14 @@ export default function AgentProfile() {
                       <p className={`font-medium ${isHolder ? 'text-blue-700 dark:text-blue-300' : 'text-gray-600 dark:text-gray-400'}`}>
                         Holder {isHolder ? '✓' : `(need ${HOLDER_THRESHOLD.toLocaleString()} ZEN)`}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400">1 task per day · free</p>
+                      <p className="text-xs text-gray-500 dark:text-gray-400">3 tasks per day · free</p>
                     </div>
                   </div>
                   <div className="flex items-start gap-2 p-2 rounded-lg">
                     <Crown className="w-4 h-4 mt-0.5 text-gray-400 flex-shrink-0" />
                     <div>
                       <p className="font-medium text-gray-600 dark:text-gray-400">
-                        Subscriber ({SUBSCRIPTION_PRICE.toLocaleString()} ZEN / 30 days)
+                        Subscriber ({SUBSCRIPTION_PRICE.toLocaleString()} ZEN or 10 MON / 30 days)
                       </p>
                       <p className="text-xs text-gray-500 dark:text-gray-400">Unlimited access</p>
                     </div>
@@ -424,7 +415,7 @@ export default function AgentProfile() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900 dark:text-white">Get Access to {agent.name}</h3>
-                <p className="text-xs text-gray-500 dark:text-gray-400">Verified Agent · ZEN required</p>
+                <p className="text-xs text-gray-500 dark:text-gray-400">Verified Agent · ZEN / MON required</p>
               </div>
             </div>
 
@@ -444,7 +435,7 @@ export default function AgentProfile() {
                   <span className="text-xs text-green-600 dark:text-green-400 font-medium">Free</span>
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
-                  Hold {HOLDER_THRESHOLD.toLocaleString()}+ ZEN · 1 task/day
+                  Hold {HOLDER_THRESHOLD.toLocaleString()}+ ZEN or 10 MON · 3 task/day
                 </p>
                 {!isHolder && (
                   <p className="text-xs text-amber-600 dark:text-amber-400 mt-1">
@@ -461,7 +452,7 @@ export default function AgentProfile() {
                     <span className="font-medium text-gray-900 dark:text-white text-sm">Subscribe</span>
                   </div>
                   <span className="text-xs font-medium text-gray-900 dark:text-white">
-                    {SUBSCRIPTION_PRICE.toLocaleString()} ZEN
+                    {SUBSCRIPTION_PRICE.toLocaleString()} ZEN / 10 MON 
                   </span>
                 </div>
                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -485,10 +476,12 @@ export default function AgentProfile() {
               </div>
             )}
 
-            <a href={NAD_FUN_URL} target="_blank" rel="noopener noreferrer"
-               className="flex items-center justify-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline mb-4">
-              Need ZEN? Buy on nad.fun <ExternalLink className="w-3 h-3" />
-            </a>
+            <button
+              onClick={() => navigate('/get-zen')}
+              className="flex items-center justify-center gap-1 text-xs text-blue-600 dark:text-blue-400 hover:underline w-full"
+            >
+              Need ZEN? How to get ZEN <ExternalLink className="w-3 h-3" />
+            </button>
 
             <div className="flex gap-3">
               <button onClick={() => setShowSubModal(false)} disabled={pending}
@@ -501,7 +494,7 @@ export default function AgentProfile() {
                       className="flex-1 px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white text-sm
                                  font-medium rounded-lg transition-colors disabled:opacity-50
                                  flex items-center justify-center gap-2">
-                {pending ? <><Loader2 className="w-4 h-4 animate-spin" />Processing...</> : 'Subscribe with ZEN'}
+                {pending ? <><Loader2 className="w-4 h-4 animate-spin" />Processing...</> : 'Subscribe'}
               </button>
             </div>
           </div>

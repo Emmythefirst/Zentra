@@ -9,7 +9,7 @@ interface AgentCardProps {
 }
 
 export default function AgentCard({ agent }: AgentCardProps) {
-  const { isHolder, isLoading: balanceLoading } = useZenBalance();
+  const { isHolder, isZenHolder, isLoading: balanceLoading } = useZenBalance();
   const { isSubscribed } = useSubscription(agent.id);
 
   // Determine access tier for this verified agent
@@ -32,13 +32,13 @@ export default function AgentCard({ agent }: AgentCardProps) {
       bg: 'bg-blue-50 dark:bg-blue-900/20',
       text: 'text-blue-700 dark:text-blue-300',
       icon: <Zap className="w-3 h-3" />,
-      label: 'ZEN Holder · 1 task/day',
+      label: `${isZenHolder ? 'ZEN' : 'MON'} Holder · 3 tasks/day`,
     },
     locked: {
       bg: 'bg-amber-50 dark:bg-amber-900/20',
       text: 'text-amber-700 dark:text-amber-400',
       icon: <Lock className="w-3 h-3" />,
-      label: 'Verified · ZEN required',
+      label: 'Verified · ZEN/MON required',
     },
     open: null,
   }[tier];
@@ -93,7 +93,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
           {tier === 'locked' ? (
             <span className="flex items-center gap-1.5 italic text-gray-400 dark:text-gray-500">
               <Lock className="w-3.5 h-3.5 flex-shrink-0" />
-              Hold 10,000 ZEN or subscribe to unlock
+              Hold 10,000 ZEN / 10 MON or subscribe to unlock
             </span>
           ) : (
             agent.description
@@ -132,7 +132,7 @@ export default function AgentCard({ agent }: AgentCardProps) {
         <div className="flex items-center justify-between pt-4 border-t border-gray-200 dark:border-gray-700 mt-auto">
           <div>
             <p className="text-sm text-gray-500 dark:text-gray-400">Rate</p>
-            <p className="font-semibold text-gray-900 dark:text-white">{agent.hourly_rate}ZEN/task</p>
+            <p className="font-semibold text-gray-900 dark:text-white">{agent.hourly_rate}MON/task</p>
           </div>
           <div className={`px-3 py-1 rounded-full text-xs font-medium ${
             agent.moltbook?.is_active

@@ -8,6 +8,7 @@ import { ZEN_TOKEN_ADDRESS, SUBSCRIPTION_PRICE } from './useZenBalance';
 export const SUBSCRIPTION_CONTRACT = import.meta.env.VITE_SUBSCRIPTION_CONTRACT as `0x${string}`;
 export const SUBSCRIPTION_DURATION_DAYS = 30;
 export const HOLDER_COOLDOWN_HOURS = 24; // 1 task per 24h for holders
+export const HOLDER_DAILY_LIMIT = 3;
 
 // ─── ABIs ─────────────────────────────────────────────────────────────────────
 const ZEN_APPROVE_ABI = [
@@ -99,35 +100,42 @@ return ms > 0 ? Math.ceil(ms / (1000 * 60 * 60 * 24)) : 0;
 
 // ── Holder daily limit (localStorage) ──
 const hasHolderAccessToday = (): boolean => {
-if (!address) return false;
-try {
-const raw = localStorage.getItem(holderKey(agentId, address));
-if (!raw) return true; // never used → free to use
-const { lastUsed } = JSON.parse(raw);
-const hoursSince = (Date.now() - lastUsed) / (1000 * 60 * 60);
-return hoursSince >= HOLDER_COOLDOWN_HOURS;
-} catch {
-return true;
-}
+  if (!address) return false;
+  try {
+    const raw = localStorage.getItem(holderKey(agentId, address));
+    if (!raw) return true;
+    const { date, count } = JSON.parse(raw);
+    const today = new Date().toISOString().split('T')[0];
+    if (date !== today) return true; // new day — reset
+    return count < HOLDER_DAILY_LIMIT;
+  } catch {
+    return true;
+  }
 };
 
 const getHolderCooldownHours = (): number => {
-if (!address) return 0;
-try {
-const raw = localStorage.getItem(holderKey(agentId, address));
-if (!raw) return 0;
-const { lastUsed } = JSON.parse(raw);
-const hoursSince = (Date.now() - lastUsed) / (1000 * 60 * 60);
-const remaining = HOLDER_COOLDOWN_HOURS - hoursSince;
-return remaining > 0 ? Math.ceil(remaining) : 0;
-} catch {
-return 0;
-}
+  // Hours until midnight when count resets
+  const now = new Date();
+  const midnight = new Date(now);
+  midnight.setHours(24, 0, 0, 0);
+  return Math.ceil((midnight.getTime() - now.getTime()) / (1000 * 60 * 60));
 };
 
 const recordHolderAccess = () => {
-if (!address) return;
-localStorage.setItem(holderKey(agentId, address), JSON.stringify({ lastUsed: Date.now() }));
+  if (!address) return;
+  const today = new Date().toISOString().split('T')[0];
+  try {
+    const raw = localStorage.getItem(holderKey(agentId, address));
+    let count = 0;
+    if (raw) {
+      const data = JSON.parse(raw);
+      if (data.date === today) count = data.count;
+    }
+    localStorage.setItem(
+      holderKey(agentId, address),
+      JSON.stringify({ date: today, count: count + 1 })
+    );
+  } catch {}
 };
 
 // ── Subscribe (approve + subscribe) ──
@@ -181,6 +189,19 @@ try {
 
 };
 
+const getTasksUsedToday = (): number => {
+  if (!address) return 0;
+  try {
+    const raw = localStorage.getItem(holderKey(agentId, address));
+    if (!raw) return 0;
+    const { date, count } = JSON.parse(raw);
+    const today = new Date().toISOString().split('T')[0];
+    return date === today ? count : 0;
+  } catch {
+    return 0;
+  }
+};
+
 return {
 isSubscribed,
 getDaysLeft,
@@ -191,5 +212,6 @@ error,
 hasHolderAccessToday,
 getHolderCooldownHours,
 recordHolderAccess,
+getTasksUsedToday,
 };
 }

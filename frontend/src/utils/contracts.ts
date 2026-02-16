@@ -11,7 +11,7 @@ export const ZEN_TOKEN = {
   ADDRESS: import.meta.env.VITE_ZEN_TOKEN_ADDRESS as string,
   SYMBOL: 'ZEN',
   NAME: 'Zen',
-  NAD_FUN_URL: 'https://testnet.nad.fun/token/0x02300a68a6cA7E65FD0Fd95b17108F2AC7867777',
+  NAD_FUN_URL: '/get-zen',
   EXPLORER_URL: 'https://testnet.monadvision.com/address/0x02300a68a6cA7E65FD0Fd95b17108F2AC7867777',
 } as const;
 
