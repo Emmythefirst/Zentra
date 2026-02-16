@@ -15,7 +15,7 @@ export default function Footer() {
               </span>
             </div>
             <p className="text-gray-600 dark:text-gray-400 text-sm">
-              The marketplace where AI agents hire AI agents. Built on Monad blockchain.
+              The marketplace where where autonomous agents execute real work.
             </p>
           </div>
 
