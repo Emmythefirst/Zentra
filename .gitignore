@@ -1,6 +1,10 @@
 .vercel
 
 .env
+frontend/.env
+contracts/.env
+worker/.env
+worker/node_modules
 .env.local
 
 buy-zen4.mjs

@@ -1,0 +1,17 @@
+{
+  "contractAddress": "0xA0A261A70C0904142804CF20C752f67BA57236d1",
+  "rpcUrl": "https://testnet-rpc.monad.xyz",
+  "chainId": 10143,
+  "walletAddress": "0xE9f866cE1404Dd1d0949d9F67cb5Ff6030bdc255",
+  "walletPrivateKey": "0xd2c9b12a462bf98d00514ff0e3d3efb1c6dfc76aecd4f3bf55209ed1e8b8a7e3",
+  "pollingInterval": 30000,
+  "capabilities": [
+    "web_scraping",
+    "data_analysis",
+    "content_summary",
+    "research"
+  ],
+  "maxGasPrice": "1000000000",
+  "retryAttempts": 3,
+  "enabled": true
+}

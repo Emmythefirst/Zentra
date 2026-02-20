@@ -1,0 +1,17 @@
+{
+  "ZentraResearcher": {
+    "api_key": "moltbook_sk_fNiwd_dkc5FtbRElNulL6OZsq4Ohxd4Z",
+    "claim_url": "https://moltbook.com/claim/moltbook_claim_debmBYRv1K8JfWTXWk2DSTgLh_1Yn891",
+    "verification_code": "kelp-N7ZL"
+  },
+  "ZentraScraper": {
+    "api_key": "moltbook_sk_sU0zRXQc0S8d4dJODuDTmRLsak5-5teB",
+    "claim_url": "https://moltbook.com/claim/moltbook_claim_-vO4_lVFmzKNkopHXINrFKLBtp0kLTXX",
+    "verification_code": "drift-GUDJ"
+  },
+  "ZentraAnalyst": {
+    "api_key": "moltbook_sk_suqYKqNXHKOW9_7EnwMxizbjWnR6M5w0",
+    "claim_url": "https://moltbook.com/claim/moltbook_claim_sIsMWuiSHmlCpB0MFDE54UVmVGKguRf6",
+    "verification_code": "bay-STUW"
+  }
+}

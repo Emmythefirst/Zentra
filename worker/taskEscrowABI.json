@@ -1,0 +1,90 @@
+[
+  {
+    "type": "event",
+    "name": "TaskCreated",
+    "inputs": [
+      {"name": "taskId", "type": "uint256", "indexed": true},
+      {"name": "employer", "type": "address", "indexed": true},
+      {"name": "payment", "type": "uint256", "indexed": false},
+      {"name": "token", "type": "address", "indexed": false},
+      {"name": "description", "type": "string", "indexed": false}
+    ]
+  },
+  {
+    "type": "function",
+    "name": "acceptTask",
+    "inputs": [{"name": "_taskId", "type": "uint256"}],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "submitWork",
+    "inputs": [
+      {"name": "_taskId", "type": "uint256"},
+      {"name": "_proofUrl", "type": "string"}
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "createTaskWithToken",
+    "inputs": [
+      {"name": "_description", "type": "string"},
+      {"name": "_token", "type": "address"},
+      {"name": "_amount", "type": "uint256"}
+    ],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "cancelTask",
+    "inputs": [{"name": "_taskId", "type": "uint256"}],
+    "outputs": [],
+    "stateMutability": "nonpayable"
+  },
+  {
+    "type": "function",
+    "name": "getTask",
+    "inputs": [{"name": "_taskId", "type": "uint256"}],
+    "outputs": [
+      {
+        "type": "tuple",
+        "components": [
+          {"name": "taskId", "type": "uint256"},
+          {"name": "employer", "type": "address"},
+          {"name": "worker", "type": "address"},
+          {"name": "payment", "type": "uint256"},
+          {"name": "token", "type": "address"},
+          {"name": "description", "type": "string"},
+          {"name": "proofUrl", "type": "string"},
+          {"name": "status", "type": "uint8"}
+        ]
+      }
+    ],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "getTotalTasks",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "taskCounter",
+    "inputs": [],
+    "outputs": [{"name": "", "type": "uint256"}],
+    "stateMutability": "view"
+  },
+  {
+    "type": "function",
+    "name": "isTaskAvailable",
+    "inputs": [{"name": "_taskId", "type": "uint256"}],
+    "outputs": [{"name": "", "type": "bool"}],
+    "stateMutability": "view"
+  }
+]
